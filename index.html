@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudahkah Negeri Ini Merdeka?</title>
+  <meta name="description" content="Sebuah analisis kritis perspektif sosial, ekonomi, dan kebebasan tentang makna kemerdekaan hari ini.">
+
+  <!-- Applies the saved theme before first paint to avoid a light/dark flash -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("merdeka_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = saved || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+  <!-- Full-page background watermark -->
+  <span class="global-watermark" aria-hidden="true">?</span>
+
+  <!-- Reading progress bar -->
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__fill" id="readingProgressFill"></div>
+  </div>
+
+  <!-- ============ HEADER / NAVBAR ============ -->
+  <header>
+    <nav class="navbar navbar-expand-md site-navbar sticky-top" aria-label="Navigasi utama">
+      <div class="container">
+        <a class="navbar-brand site-navbar__brand" href="#hero">MERDEKA<span class="text-accent">?</span></a>
+
+        <div class="d-flex align-items-center order-lg-2 gap-2">
+          <!-- Light / dark theme toggle -->
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Ganti mode terang / gelap" aria-pressed="false">
+            <svg class="theme-toggle__icon icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg class="theme-toggle__icon icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20.5 14.4A8.5 8.5 0 1 1 9.6 3.5a7 7 0 0 0 10.9 10.9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span class="theme-toggle__text theme-toggle__text--dark">Mode Gelap</span>
+            <span class="theme-toggle__text theme-toggle__text--light">Mode Terang</span>
+          </button>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"
+            aria-controls="navMain" aria-expanded="false" aria-label="Buka menu navigasi">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navMain">
+          <ul class="navbar-nav site-navbar__links">
+            <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+            <li class="nav-item"><a class="nav-link" href="#analisis">Analisis</a></li>
+            <li class="nav-item"><a class="nav-link" href="#perspektif">Perspektif</a></li>
+            <li class="nav-item"><a class="nav-link" href="#refleksi">Refleksi</a></li>
+            <li class="nav-item"><a class="nav-link" href="#jajak">Jajak Pendapat</a></li>
+            <li class="nav-item"><a class="nav-link" href="#metodologi">Sumber</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO SECTION ============ -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-section__inner">
+        <p class="eyebrow reveal">Esai Reflektif &mdash; Edisi Kemerdekaan</p>
+        <h1 class="hero-section__title reveal" id="heroTitle"></h1>
+        <p class="hero-section__subtitle reveal" id="heroSubtitle"></p>
+
+        <div class="hero-meta reveal" id="heroMeta">
+          <div class="hero-meta__author">
+            <span class="hero-meta__avatar" id="heroAuthorInitial" aria-hidden="true"></span>
+            <span class="fw-600" id="heroAuthor"></span>
+          </div>
+          <span class="hero-meta__dot" aria-hidden="true">&middot;</span>
+          <span id="heroDate"></span>
+          <span class="hero-meta__dot" aria-hidden="true">&middot;</span>
+          <span id="heroReadTime"></span>
+        </div>
+      </div>
+      <div class="hero-section__scrollcue reveal" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
+
+    <!-- ============ BERANDA: RINGKASAN & DAFTAR ISI ============ -->
+    <section id="beranda" class="section-block">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">00 &mdash; Beranda</p>
+          <h2 id="overviewTitle"></h2>
+          <p class="section-heading__desc" id="overviewSummary"></p>
+        </div>
+
+        <ol class="toc-list reveal" id="tocList">
+          <!-- Daftar isi diinjeksikan dinamis via script.js -->
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 1: CORE ARGUMENT ============ -->
+    <section id="analisis" class="section-block">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">01 &mdash; Argumen Utama</p>
+          <h2>Membaca Ulang Makna Kemerdekaan</h2>
+        </div>
+
+        <article class="editorial-article" id="articleBody">
+          <!-- Paragraphs + pull-quote injected dynamically via script.js -->
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 2: DUAL PERSPECTIVE ============ -->
+    <section id="perspektif" class="section-block section-block--tinted">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">02 &mdash; Dua Sisi Mata Uang</p>
+          <h2>Pencapaian, Berhadapan Dengan Realita</h2>
+        </div>
+
+        <!-- Desktop: side-by-side columns -->
+        <div class="perspective-grid d-none d-md-grid" id="perspectiveGridDesktop" aria-hidden="false">
+          <div class="perspective-col perspective-col--a reveal" id="perspectiveColA">
+            <h3 class="perspective-col__title" id="perspectiveTitleA"></h3>
+            <ul class="perspective-col__list" id="perspectiveListA"></ul>
+          </div>
+
+          <div class="perspective-divider" aria-hidden="true">
+            <span>VS</span>
+          </div>
+
+          <div class="perspective-col perspective-col--b reveal" id="perspectiveColB">
+            <h3 class="perspective-col__title" id="perspectiveTitleB"></h3>
+            <ul class="perspective-col__list" id="perspectiveListB"></ul>
+          </div>
+        </div>
+
+        <!-- Mobile: Bootstrap nav-pills / tabs -->
+        <div class="d-md-none reveal" id="perspectiveTabsMobile">
+          <ul class="nav nav-pills perspective-pills mb-4" id="perspectivePillTabs" role="tablist"></ul>
+          <div class="tab-content" id="perspectiveTabContent"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REFLEKSI PENUTUP ============ -->
+    <section id="refleksi" class="section-block">
+      <div class="container">
+        <div class="reflection-block reveal">
+          <p class="eyebrow text-center">03 &mdash; Refleksi</p>
+          <h2 class="reflection-block__title" id="reflectionTitle"></h2>
+          <div id="reflectionBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 3: POLLING & SENTIMENT ============ -->
+    <section id="jajak" class="section-block">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">04 &mdash; Suara Pembaca</p>
+          <h2>Bagaimana Menurutmu?</h2>
+        </div>
+
+        <div class="poll-card reveal" id="pollCard">
+          <p class="poll-card__question" id="pollQuestion"></p>
+          <p class="poll-card__description" id="pollDescription"></p>
+
+          <div class="poll-card__options" id="pollOptions">
+            <!-- Vote buttons injected dynamically -->
+          </div>
+
+          <div class="poll-card__results d-none" id="pollResults">
+            <!-- Result bars injected dynamically -->
+          </div>
+
+          <p class="poll-card__total" id="pollTotal"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOURCES & METHODOLOGY ============ -->
+    <section id="metodologi" class="section-block section-block--tinted">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">05 &mdash; Metodologi</p>
+          <h2>Metodologi &amp; Sumber Referensi</h2>
+          <p class="section-heading__desc">Data dan klaim pada tulisan ini disusun dengan mengacu pada sumber-sumber berikut.</p>
+        </div>
+
+        <div class="row g-3 g-lg-4" id="sourcesGrid">
+          <!-- Source cards injected dynamically via script.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>
+        <p class="site-footer__brand">MERDEKA<span class="text-accent">?</span></p>
+        <p class="site-footer__note" id="footerNote"></p>
+      </div>
+      <p class="site-footer__copyright" id="footerCopyright"></p>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Kembali ke atas halaman">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- Bootstrap 5.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom script -->
+  <script src="js/script.js"></script>
+</body>
+</html>
